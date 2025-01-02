@@ -1,8 +1,7 @@
 package com.realtrynna.spring_start.repositories;
 
-import com.realtrynna.spring_start.Domain.Board;
+import com.realtrynna.spring_start.domain.Board;
 import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository

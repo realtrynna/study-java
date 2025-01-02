@@ -1,4 +1,4 @@
-package com.realtrynna.spring_start.Domain;
+package com.realtrynna.spring_start.domain;
 
 import jakarta.persistence.*;
 
