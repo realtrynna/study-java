@@ -16,31 +16,20 @@ import java.util.Optional;
 @Service
 @Qualifier("mainPublicationService")
 public class BoardService implements PublicationInterface {
-    private final BoardRepository boardRepository;
-    private final JdbcTemplateBoardRepository jdbcTemplateBoardRepository;
-    private final JpaRepository jpaRepository;
-    private final DataJpaRepository dataJpaRepository;
+    private BoardRepository boardRepository;
+    private JdbcTemplateBoardRepository jdbcTemplateBoardRepository;
+    private JpaRepository jpaRepository;
+    private DataJpaRepository dataJpaRepository;
+    private final SomethingInterface somethingInterface;
 
-    BoardService(BoardRepository boardRepository, JdbcTemplateBoardRepository jdbcTemplateBoardRepository, JpaRepository jpaRepository, DataJpaRepository dataJpaRepository) {
-        this.boardRepository = boardRepository;
-        this.jdbcTemplateBoardRepository = jdbcTemplateBoardRepository;
-        this.jpaRepository = jpaRepository;
-        this.dataJpaRepository = dataJpaRepository;
+    public BoardService(@Qualifier("doSomethingService") SomethingInterface somethingInterface) {
+        this.somethingInterface = somethingInterface;
     }
 
     @Override
-    @Transactional
-    public String create(String title) {
-        Board board = new Board();
-
-        board.setTitle(title);
-
-        dataJpaRepository.save(board);
-
-        Optional<Board> result = dataJpaRepository.findByIdAndTitle(1L, "윤승근");
-
-        System.out.println("결과" + result);
-
-        return title;
+//    @Transactional
+    public void create(String title) {
+        Boolean result = somethingInterface.getIs();
+        System.out.println(result);
     }
 }

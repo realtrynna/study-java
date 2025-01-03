@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 @Primary
 public class CommentService implements PublicationInterface {
     @Override
-    public String create(String title) {
+    public void create(String title) {
         String comment = "This is a comment";
 
-        return comment;
+        return;
     }
 }
