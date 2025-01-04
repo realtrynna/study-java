@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long id;
-
     private String title;
 
     public void setId(Long id) {

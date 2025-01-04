@@ -1,5 +1,6 @@
 package com.realtrynna.spring_start.controllers;
 
+import com.realtrynna.spring_start.domain.request.CreateBoardRequest;
 import com.realtrynna.spring_start.services.BoardService;
 import com.realtrynna.spring_start.services.PublicationInterface;
 import com.realtrynna.spring_start.services.S3Service;
@@ -24,10 +25,10 @@ public class BoardController {
 
     @PostMapping("board")
     public void createBoard(
-        @RequestParam(value = "file") MultipartFile file
-    ) throws IOException {
-        s3Service.upload(file);
+        @RequestBody CreateBoardRequest createBoardRequest
+    ) {
+        CreateBoardRequest board = new CreateBoardRequest("게시판 제목입니다.");
 
-        return;
+        System.out.println(board);
     }
 }
