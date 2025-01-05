@@ -4,6 +4,7 @@ import com.realtrynna.spring_start.domain.request.CreateBoardRequest;
 import com.realtrynna.spring_start.services.BoardService;
 import com.realtrynna.spring_start.services.PublicationInterface;
 import com.realtrynna.spring_start.services.S3Service;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +26,8 @@ public class BoardController {
 
     @PostMapping("board")
     public void createBoard(
-        @RequestBody CreateBoardRequest createBoardRequest
+        @RequestBody @Valid CreateBoardRequest createBoardRequest
     ) {
-        CreateBoardRequest board = new CreateBoardRequest("게시판 제목입니다.");
-
-        System.out.println(board);
+        System.out.println(createBoardRequest.getTitle());
     }
 }
