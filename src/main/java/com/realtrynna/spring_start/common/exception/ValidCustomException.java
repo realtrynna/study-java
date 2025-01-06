@@ -1,4 +1,4 @@
-package com.realtrynna.spring_start.common.exceptions;
+package com.realtrynna.spring_start.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,6 @@ public class ValidCustomException {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidCustomException(MethodArgumentNotValidException ex) {
         Map<String, String> errorDetails = new HashMap<>();
-
-        System.out.println("커스텀 예외 처리" + ex);
 
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             errorDetails.put(fieldError.getField(), fieldError.getDefaultMessage());
