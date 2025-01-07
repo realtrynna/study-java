@@ -29,9 +29,6 @@ public class ResponseWrapper implements ResponseBodyAdvice<Object> {
     ) {
         String path = req.getURI().getPath();
 
-        System.out.println("본문" + body);
-        System.out.println("경로" + path);
-
         return body;
     }
 }

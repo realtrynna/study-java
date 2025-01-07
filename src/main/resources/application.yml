@@ -1,0 +1,29 @@
+# AWS S3
+cloud:
+  aws:
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_ACCESS_KEY}
+    region:
+      static: ${REGION}  # 버킷의 리전
+    s3:
+      bucket: "dev-know"   # 버킷 이름
+    stack:
+      auto: false
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: postgres                              # DB 사용자 이름
+    password: 1234                              # DB 비밀번호
+    driver-class-name: org.postgresql.Driver          # MySQL 드라이버 클래스 이름
+  jpa:
+    hibernate:
+      ddl-auto: update                                   # DDL 옵션 (create, update, validate, none 등)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: "10MB"
+      max-request-size: "10MB"

@@ -6,9 +6,12 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
+@Getter @Setter
 public class User extends BaseEntity {
     @Column(length = 32, nullable = false)
     private String name;

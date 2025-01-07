@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(value = {AuditingEntityListener.class})
 @Getter
 public class BaseEntity {
-
     @Id
     /**
      * 기본 키값 자동 생성(auto increment, serial)
