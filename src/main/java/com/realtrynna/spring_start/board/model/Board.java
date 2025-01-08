@@ -22,4 +22,12 @@ public class Board extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    /**
+     * 연관관계 편의 메서드
+     */
+    public void setUser(User user) {
+        this.user = user;
+        user.getBoardList().add(this);
+    }
 }
