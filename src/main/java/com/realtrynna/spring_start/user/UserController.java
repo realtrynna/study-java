@@ -1,8 +1,10 @@
 package com.realtrynna.spring_start.user;
 
 import com.realtrynna.spring_start.board.model.Board;
+import com.realtrynna.spring_start.common.exception.ApiResponse;
 import com.realtrynna.spring_start.user.model.User;
 import com.realtrynna.spring_start.user.model.request.CreateUserDto;
+import com.realtrynna.spring_start.user.model.response.UserResponseDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -22,7 +24,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("sign-up")
-    public void create(@Valid @RequestBody CreateUserDto createUserDto) {
+    public ApiResponse<UserResponseDto> create(@Valid @RequestBody CreateUserDto createUserDto) {
         userService.create(createUserDto);
+
+        return ApiResponse.success(new UserResponseDto(
+            1L,
+            createUserDto.getName(),
+            createUserDto.getEmail()
+        ));
     }
 }

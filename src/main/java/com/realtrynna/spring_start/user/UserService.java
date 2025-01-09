@@ -10,13 +10,17 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public Boolean findByEmail(String email)  {
-        return userRepository.findByEmail(email).isPresent();
+    public Boolean existUser(String email)  {
+        return userRepository.existsByEmail(email);
     }
 
     public void create(CreateUserDto createUserDto) {
-        Boolean isUser = findByEmail(createUserDto.getEmail());
+        Boolean isUser = existUser(createUserDto.getEmail());
 
-//        if (isUser)
+        if (isUser) {
+            /**
+             * 예외 처리
+             */
+        }
     }
 }
