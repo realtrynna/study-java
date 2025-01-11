@@ -33,4 +33,8 @@ public class UserController {
             createUserDto.getEmail()
         ));
     }
+
+//    public <T> void getHello(T param) {
+//        System.
+//    }
 }
