@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("sign-up")
+    @PostMapping("create")
     public ApiResponse<UserResponseDto> create(@Valid @RequestBody CreateUserDto createUserDto) {
         userService.create(createUserDto);
 
@@ -33,8 +33,4 @@ public class UserController {
             createUserDto.getEmail()
         ));
     }
-
-//    public <T> void getHello(T param) {
-//        System.
-//    }
 }
