@@ -26,4 +26,8 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    public void delete() {
+        userRepository.deleteByEmail("realtrynna@gmail.com");
+    }
 }
