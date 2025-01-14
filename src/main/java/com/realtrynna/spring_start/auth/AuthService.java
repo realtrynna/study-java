@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.security.sasl.AuthenticationException;
 import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,8 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final Argon2PasswordEncoder passwordEncoder;
-//    private final JwtUtil jwtUtil;
+    @Autowired
+    private final JwtUtil jwtUtil;
 
     public Boolean existUser(String email) {
         return userRepository.existsByEmail(email);
@@ -34,6 +36,9 @@ public class AuthService {
         Boolean isPasswordMatched = passwordEncoder.matches(loginDto.getPassword(), password[0]);
         if (!existUser || !isPasswordMatched) throw new AuthenticationException("인증 실패");
 
-
+        if (user.isPresent()) {
+//            String token = jwtUtil.createToken(user.get());
+//            System.out.println();
+        }
     }
 }
