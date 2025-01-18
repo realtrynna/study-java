@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final Argon2PasswordEncoder passwordEncoder;
-    @Autowired
     private final JwtUtil jwtUtil;
 
     public Boolean existUser(String email) {
@@ -37,8 +36,8 @@ public class AuthService {
         if (!existUser || !isPasswordMatched) throw new AuthenticationException("인증 실패");
 
         if (user.isPresent()) {
-//            String token = jwtUtil.createToken(user.get());
-//            System.out.println();
+            String token = jwtUtil.createToken(user.get());
+            System.out.println();
         }
     }
 }

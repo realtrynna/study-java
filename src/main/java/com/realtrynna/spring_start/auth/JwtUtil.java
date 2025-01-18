@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.time.ZonedDateTime;
+import java.util.Base64;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,23 +21,24 @@ public class JwtUtil {
         @Value("${jwt.secretKey}") String secretKey,
         @Value("${jwt.expiration-time}") Long expirationTime
     ) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.secretKey = String.valueOf(Keys.hmacShaKeyFor(keyBytes));
+        this.secretKey = secretKey;
         this.expirationTime = expirationTime;
+
+        /**
+         * base64로 인코딩해보자.
+         */
+        String encodingSecretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+
+        System.out.println("이 값은 일반 ");
     }
 
-    private String createToken(User user) {
-        Claims claims = Jwts.claims();
-        claims.put("email", user.getEmail());
-
-        ZonedDateTime now = ZonedDateTime.now();
-        ZonedDateTime tokenValidity = now.plusSeconds(expirationTime);
-
-        return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(Date.from(now.toInstant()))
-            .setExpiration(Date.from(tokenValidity.toInstant()))
-            .signWith(SignatureAlgorithm.HS256, secretKey)
-            .compact();
+    String createToken(User user) {
+        return "return";
+//        return Jwts.builder()
+//            .setClaims(claims)
+//            .setIssuedAt(Date.from(now.toInstant()))
+//            .setExpiration(Date.from(tokenValidity.toInstant()))
+//            .signWith(Keys.hmacShaKeyFor(decodingSecretKey))
+//            .compact();
     }
 }
