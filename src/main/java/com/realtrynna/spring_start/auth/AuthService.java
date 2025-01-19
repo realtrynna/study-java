@@ -3,6 +3,8 @@ package com.realtrynna.spring_start.auth;
 import com.realtrynna.spring_start.auth.model.request.LoginDto;
 import com.realtrynna.spring_start.user.UserRepository;
 import com.realtrynna.spring_start.user.model.User;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 import javax.security.sasl.AuthenticationException;
 import javax.swing.text.html.Option;
@@ -22,7 +24,8 @@ public class AuthService {
         return userRepository.existsByEmail(email);
     }
 
-    public void validateUser(LoginDto loginDto) throws AuthenticationException {
+    public void validateUser(LoginDto loginDto)
+        throws AuthenticationException, NoSuchAlgorithmException, InvalidKeySpecException {
         Boolean existUser = existUser(loginDto.getEmail());
 
         final String[] password = new String[1];
@@ -37,7 +40,7 @@ public class AuthService {
 
         if (user.isPresent()) {
             String token = jwtUtil.createToken(user.get());
-            System.out.println();
+            System.out.println("토큰" + token);
         }
     }
 }
