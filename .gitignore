@@ -38,3 +38,5 @@ out/
 
 application.yaml
 application.yml
+private.pem
+public.pem

@@ -6,6 +6,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -36,17 +41,14 @@ public class JwtUtil {
         this.expirationTime = expirationTime;
     }
 
-    public String createToken(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String encoded = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        byte[] decoded = Base64.getDecoder().decode(encoded);
+    public String createToken(User user) throws Exception {
+        readPrivateKey();
 
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValidity = now.plusSeconds(expirationTime);
-
-        byte[] temp = new byte[32];
         
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
         generator.initialize(2048);
@@ -56,15 +58,24 @@ public class JwtUtil {
         PrivateKey privateKey = generator.generateKeyPair().getPrivate();
 
         RSAPrivateKeySpec privateKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
-//        RSAPublicKey tempKey = (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
         RSAPrivateKey tempKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
 
         return Jwts.builder()
             .setClaims(claims)
             .setIssuedAt(Date.from(now.toInstant()))
             .setExpiration(Date.from(tokenValidity.toInstant()))
-//            .signWith(Keys.hmacShaKeyFor(temp))
-            .signWith(tempKey)
+            .signWith(SignatureAlgorithm.RS256, tempKey)
             .compact();
+    }
+
+    private void readPrivateKey() throws Exception {
+        String projectDir = System.getProperty("user.dir");
+        String privateKeyPath = Paths.get(projectDir, "private.pem").toString();
+
+        byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyPath));
+
+        String key = new String(keyBytes);
+
+        System.out.println(key);
     }
 }

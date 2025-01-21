@@ -18,9 +18,9 @@ public class AuthController {
 
     @PostMapping("login")
     public ApiResponse<String> login(@Valid @RequestBody LoginDto loginDto)
-        throws AuthenticationException, NoSuchAlgorithmException, InvalidKeySpecException {
-        authService.validateUser(loginDto);
+        throws Exception {
+        String token = authService.validateUser(loginDto);
 
-        return ApiResponse.success("success");
+        return ApiResponse.success("token");
     }
 }

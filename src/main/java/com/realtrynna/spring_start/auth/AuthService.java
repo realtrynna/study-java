@@ -7,9 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 import javax.security.sasl.AuthenticationException;
-import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,27 +18,14 @@ public class AuthService {
     private final Argon2PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public Boolean existUser(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    public void validateUser(LoginDto loginDto)
-        throws AuthenticationException, NoSuchAlgorithmException, InvalidKeySpecException {
-        Boolean existUser = existUser(loginDto.getEmail());
-
-        final String[] password = new String[1];
-
+    public String validateUser(LoginDto loginDto)
+        throws Exception {
         Optional<User> user = userRepository.findByEmail(loginDto.getEmail());
-        user.ifPresent(info -> {
-            password[0] = info.getPassword();
-        });
 
-        Boolean isPasswordMatched = passwordEncoder.matches(loginDto.getPassword(), password[0]);
-        if (!existUser || !isPasswordMatched) throw new AuthenticationException("인증 실패");
-
-        if (user.isPresent()) {
-            String token = jwtUtil.createToken(user.get());
-            System.out.println("토큰" + token);
+        if (user.isEmpty() || !passwordEncoder.matches(loginDto.getPassword(), user.get().getPassword())) {
+            throw new AuthenticationException("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
+
+        return jwtUtil.createToken(user.get());
     }
 }
