@@ -21,6 +21,8 @@ public class AuthController {
         throws Exception {
         String token = authService.validateUser(loginDto);
 
+        System.out.println("토큰" + token);
+
         return ApiResponse.success("token");
     }
 }

@@ -42,40 +42,40 @@ public class JwtUtil {
     }
 
     public String createToken(User user) throws Exception {
-        readPrivateKey();
-
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValidity = now.plusSeconds(expirationTime);
-        
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-        generator.initialize(2048);
-
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PublicKey publicKey = generator.generateKeyPair().getPublic();
-        PrivateKey privateKey = generator.generateKeyPair().getPrivate();
-
-        RSAPrivateKeySpec privateKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
-        RSAPrivateKey tempKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
 
         return Jwts.builder()
             .setClaims(claims)
             .setIssuedAt(Date.from(now.toInstant()))
             .setExpiration(Date.from(tokenValidity.toInstant()))
-            .signWith(SignatureAlgorithm.RS256, tempKey)
+            .signWith(SignatureAlgorithm.RS256, (RSAPrivateKey) readPrivateKey())
             .compact();
     }
 
-    private void readPrivateKey() throws Exception {
+    private PrivateKey readPrivateKey() throws Exception {
         String projectDir = System.getProperty("user.dir");
         String privateKeyPath = Paths.get(projectDir, "private.pem").toString();
 
         byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyPath));
 
-        String key = new String(keyBytes);
+        String key = new String(keyBytes)
+            .replace("-----BEGIN PRIVATE KEY-----", "")
+            .replace("-----END PRIVATE KEY-----", "")
+            .replaceAll("\n", "")
+            .replaceAll("\r", "")
+            .replaceAll("\\s", "");
 
-        System.out.println(key);
+        /**
+         * base64로 인코딩된 값을 decoding
+         */
+        byte[] encoded = Base64.getDecoder().decode(key);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PrivateKey privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encoded));
+
+        return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encoded));
     }
 }
