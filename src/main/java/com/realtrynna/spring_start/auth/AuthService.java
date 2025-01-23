@@ -28,4 +28,10 @@ public class AuthService {
 
         return jwtUtil.createToken(user.get());
     }
+
+    public void validateToken(String token) throws Exception {
+        Boolean result = jwtUtil.validateToken(token);
+
+        System.out.println(result);
+    }
 }

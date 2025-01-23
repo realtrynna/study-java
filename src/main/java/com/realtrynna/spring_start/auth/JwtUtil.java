@@ -4,6 +4,7 @@ import com.realtrynna.spring_start.user.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SigningKeyResolver;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -25,6 +27,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Date;
+import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -39,21 +42,6 @@ public class JwtUtil {
     ) {
         this.secretKey = secretKey;
         this.expirationTime = expirationTime;
-    }
-
-    public String createToken(User user) throws Exception {
-        Claims claims = Jwts.claims();
-        claims.put("email", user.getEmail());
-
-        ZonedDateTime now = ZonedDateTime.now();
-        ZonedDateTime tokenValidity = now.plusSeconds(expirationTime);
-
-        return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(Date.from(now.toInstant()))
-            .setExpiration(Date.from(tokenValidity.toInstant()))
-            .signWith(SignatureAlgorithm.RS256, (RSAPrivateKey) readPrivateKey())
-            .compact();
     }
 
     private PrivateKey readPrivateKey() throws Exception {
@@ -78,4 +66,42 @@ public class JwtUtil {
 
         return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encoded));
     }
+
+    public String createToken(User user) throws Exception {
+        Claims claims = Jwts.claims();
+        claims.put("email", user.getEmail());
+
+        ZonedDateTime now = ZonedDateTime.now();
+        ZonedDateTime tokenValidity = now.plusSeconds(expirationTime);
+
+        return Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(Date.from(now.toInstant()))
+            .setExpiration(Date.from(tokenValidity.toInstant()))
+            .signWith(SignatureAlgorithm.RS256, (RSAPrivateKey) readPrivateKey())
+            .compact();
+    }
+
+    public Boolean validateToken(String token) throws Exception {
+        try {
+            Jwts.parserBuilder().setSigningKey((Key) readPrivateKey()).build().parseClaimsJws(token);
+
+            return true;
+        } catch (SecurityException e) {
+            System.out.println("토큰 검증 에러 발생" + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public <T> T getClaimFromToken(final String token, final Function<Claims, T> claimsResolver)
+        throws Exception {
+        if(Boolean.FALSE.equals(validateToken(token)))
+            return null;
+    }
+
+    /**
+     * https://jangjjolkit.tistory.com/72
+     * getAllClaimsFromToken
+     */
 }

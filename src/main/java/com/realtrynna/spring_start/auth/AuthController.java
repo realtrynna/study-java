@@ -9,6 +9,7 @@ import javax.security.sasl.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
@@ -21,8 +22,11 @@ public class AuthController {
         throws Exception {
         String token = authService.validateUser(loginDto);
 
-        System.out.println("토큰" + token);
+        return ApiResponse.success(token);
+    }
 
-        return ApiResponse.success("token");
+    @PostMapping("auth")
+    public void auth(@RequestHeader("Authorization") String token) throws Exception {
+        authService.validateToken(token);
     }
 }
