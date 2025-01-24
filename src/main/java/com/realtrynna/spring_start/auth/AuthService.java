@@ -3,6 +3,7 @@ package com.realtrynna.spring_start.auth;
 import com.realtrynna.spring_start.auth.model.request.LoginDto;
 import com.realtrynna.spring_start.user.UserRepository;
 import com.realtrynna.spring_start.user.model.User;
+import io.jsonwebtoken.Claims;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
@@ -31,7 +32,8 @@ public class AuthService {
 
     public void validateToken(String token) throws Exception {
         Boolean result = jwtUtil.validateToken(token);
+        String tokenBody = jwtUtil.getBodyFromToken(token).get("email").toString();
 
-        System.out.println(result);
+        System.out.println(tokenBody);
     }
 }

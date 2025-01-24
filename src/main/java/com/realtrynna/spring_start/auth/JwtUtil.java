@@ -62,9 +62,28 @@ public class JwtUtil {
          */
         byte[] encoded = Base64.getDecoder().decode(key);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PrivateKey privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encoded));
 
         return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encoded));
+    }
+
+    private PublicKey readPublicKey() throws Exception {
+        String projectDir = System.getProperty("user.dir");
+        String publicKeyPath = Paths.get(projectDir, "public.pem").toString();
+
+        byte[] keyBytes = Files.readAllBytes(Paths.get(publicKeyPath));
+
+        String key = new String(keyBytes)
+            .replace("-----BEGIN PUBLIC KEY-----", "")
+            .replace("-----END PUBLIC KEY-----", "")
+            .replaceAll("\n", "")
+            .replaceAll("\r", "")
+            .replaceAll("\\s", "");
+
+        byte[] encoded = Base64.getDecoder().decode(key);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicKey = keyFactory.generatePublic(new java.security.spec.X509EncodedKeySpec(encoded));
+
+        return publicKey;
     }
 
     public String createToken(User user) throws Exception {
@@ -94,14 +113,15 @@ public class JwtUtil {
         return false;
     }
 
-    public <T> T getClaimFromToken(final String token, final Function<Claims, T> claimsResolver)
-        throws Exception {
-        if(Boolean.FALSE.equals(validateToken(token)))
-            return null;
-    }
+    public Claims getBodyFromToken(String token) throws Exception {
+        PublicKey publicKey = readPublicKey();
 
-    /**
-     * https://jangjjolkit.tistory.com/72
-     * getAllClaimsFromToken
-     */
+        System.out.println("공개 키" + publicKey);
+
+        return Jwts.parserBuilder()
+            .setSigningKey(readPublicKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    }
 }
