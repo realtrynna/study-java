@@ -114,10 +114,6 @@ public class JwtUtil {
     }
 
     public Claims getBodyFromToken(String token) throws Exception {
-        PublicKey publicKey = readPublicKey();
-
-        System.out.println("공개 키" + publicKey);
-
         return Jwts.parserBuilder()
             .setSigningKey(readPublicKey())
             .build()
