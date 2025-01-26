@@ -11,8 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User save(User user);
-    boolean existsByEmail(String email);
+
     Optional<User> findByEmail(String email);
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("delete from User u where u.email = ?1")

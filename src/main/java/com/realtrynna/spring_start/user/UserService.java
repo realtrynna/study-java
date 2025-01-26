@@ -27,6 +27,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public void delete() {
         userRepository.deleteByEmail("realtrynna@gmail.com");
     }
