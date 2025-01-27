@@ -26,11 +26,4 @@ public class AuthService {
 
         return jwtUtil.createToken(user.get());
     }
-
-    public void validateToken(String token) throws Exception {
-        Boolean result = jwtUtil.validateToken(token);
-        String tokenBody = jwtUtil.getBodyFromToken(token).get("email").toString();
-
-        System.out.println(tokenBody);
-    }
 }

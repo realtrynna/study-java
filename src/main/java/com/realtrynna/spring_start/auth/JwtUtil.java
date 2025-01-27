@@ -2,6 +2,7 @@ package com.realtrynna.spring_start.auth;
 
 import com.realtrynna.spring_start.user.model.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SigningKeyResolver;
@@ -104,13 +105,10 @@ public class JwtUtil {
     public Boolean validateToken(String token) throws Exception {
         try {
             Jwts.parserBuilder().setSigningKey((Key) readPrivateKey()).build().parseClaimsJws(token);
-
             return true;
-        } catch (SecurityException e) {
-            System.out.println("토큰 검증 에러 발생" + e.getMessage());
+        } catch (JwtException e) {
+            throw new JwtException("토큰 검증 실패" + e.getMessage());
         }
-
-        return false;
     }
 
     public Claims getBodyFromToken(String token) throws Exception {

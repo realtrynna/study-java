@@ -16,7 +16,8 @@ public class SecurityConfig  {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((authorize) -> authorize
-//                .requestMatchers(new AntPathRequestMatcher("/auth", "POST")).authenticated()
+                .requestMatchers(new AntPathRequestMatcher("/auth", "POST")).authenticated()
+//                .requestMatchers(new AntPathRequestMatcher("/update", "PATCH")).authenticated()
                 .anyRequest().permitAll()
             );
         http.csrf(AbstractHttpConfigurer::disable);

@@ -24,9 +24,4 @@ public class AuthController {
 
         return ApiResponse.success(token);
     }
-
-    @PostMapping("auth")
-    public void auth(@RequestHeader("Authorization") String token) throws Exception {
-        authService.validateToken(token);
-    }
 }

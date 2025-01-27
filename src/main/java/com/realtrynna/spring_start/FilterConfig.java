@@ -1,5 +1,7 @@
-package com.realtrynna.spring_start.auth;
+package com.realtrynna.spring_start;
 
+import com.realtrynna.spring_start.auth.JwtAuthenticationFilter;
+import com.realtrynna.spring_start.auth.JwtUtil;
 import com.realtrynna.spring_start.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -16,7 +18,7 @@ public class FilterConfig {
     public FilterRegistrationBean<JwtAuthenticationFilter> filterRegistrationBean() {
         FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JwtAuthenticationFilter(userService, jwtUtil));
-        registrationBean.addUrlPatterns("/auth");
+        registrationBean.addUrlPatterns("/update");
         registrationBean.setOrder(1);
         return registrationBean;
     }

@@ -14,6 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
+
+
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("delete from User u where u.email = ?1")
