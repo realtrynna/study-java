@@ -35,9 +35,9 @@ public class UserService {
     }
 
     public void update(UpdateUserDto updateUserDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        System.out.println(authentication.getName());
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        System.out.println(authentication.getName());
     }
 
     public void delete() {

@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +39,9 @@ public class UserController {
     }
 
     @PatchMapping("update")
-    public void update(@RequestBody UpdateUserDto updateUserDto) {
+    public void update(@AuthenticationPrincipal String username, @RequestBody UpdateUserDto updateUserDto) {
+        System.out.println("사용자 이름" + username);
+
         userService.update(updateUserDto);
     }
 }
