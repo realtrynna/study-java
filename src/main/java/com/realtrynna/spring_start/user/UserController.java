@@ -39,8 +39,8 @@ public class UserController {
     }
 
     @PatchMapping("update")
-    public void update(@AuthenticationPrincipal String username, @RequestBody UpdateUserDto updateUserDto) {
-        System.out.println("사용자 이름" + username);
+    public void update(@AuthenticationPrincipal User userDetails, @RequestBody UpdateUserDto updateUserDto) {
+        System.out.println("사용자 이름" + userDetails.getPassword());
 
         userService.update(updateUserDto);
     }

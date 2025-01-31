@@ -55,8 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         return user.map(
                 value -> new UsernamePasswordAuthenticationToken(
-                    value.getEmail(),
-                    value.getPassword(),
+                    value,
                     Collections.singletonList(new SimpleGrantedAuthority("normal"))
                 ))
             .orElse(null);
