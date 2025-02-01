@@ -30,16 +30,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
+            /**
+             * 토큰 검증
+             */
             jwtUtil.validateToken(token);
 
+            /**
+             * 토큰 페이로드에서 사용자 정보 추출
+             */
             String email = jwtUtil.getBodyFromToken(token).get("email").toString();
 
-//            System.out.println("필터 인증 여부" + SecurityContextHolder.getContext().getAuthentication() == null);
-
-//            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                SecurityContextHolder.getContext().setAuthentication(getAuthentication(email));
-//            }
-
+            System.out.println("필터 인증 여부" + SecurityContextHolder.getContext().getAuthentication());
+            SecurityContextHolder.getContext().setAuthentication(getAuthentication(email));
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             throw new JwtException(e.getMessage());
