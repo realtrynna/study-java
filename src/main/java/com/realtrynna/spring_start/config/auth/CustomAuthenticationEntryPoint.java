@@ -21,6 +21,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException authException) {
+        System.out.println("인증 예외" + authException);
         exceptionHandler(res);
     }
 

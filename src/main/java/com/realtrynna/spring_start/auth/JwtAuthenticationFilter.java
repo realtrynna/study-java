@@ -16,9 +16,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * 요청이 컨트롤러로 도달하기 전 요청 헤더에 있는 토큰을 검증합니다.
+ */
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final UserService userService;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -53,14 +55,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * 이메일을 통해 사용자를 찾고 아이디와 패스워드로 인증 토큰 생성
      */
     private UsernamePasswordAuthenticationToken getAuthentication(String email) {
-        Optional<User> user = userService.findUserByEmail(email);
-
-        return user.map(
-                value -> new UsernamePasswordAuthenticationToken(
-                    value,
-                    Collections.singletonList(new SimpleGrantedAuthority("normal"))
-                ))
-            .orElse(null);
-
+//        Optional<User> user = userService.findUserByEmail(email);
+//
+//        return user.map(
+//                value -> new UsernamePasswordAuthenticationToken(
+//                    value,
+//                    Collections.singletonList(new SimpleGrantedAuthority("normal"))
+//                ))
+//            .orElse(null);
+        return new UsernamePasswordAuthenticationToken(
+            "value",
+            Collections.singletonList(new SimpleGrantedAuthority("normal")));
     }
 }

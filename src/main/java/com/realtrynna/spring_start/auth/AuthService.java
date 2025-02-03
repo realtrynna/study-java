@@ -6,6 +6,7 @@ import com.realtrynna.spring_start.user.model.User;
 import java.util.Optional;
 import javax.security.sasl.AuthenticationException;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class AuthService {
         Optional<User> user = userRepository.findByEmail(loginDto.getEmail());
 
         if (user.isEmpty() || !passwordEncoder.matches(loginDto.getPassword(), user.get().getPassword())) {
-            throw new AuthenticationException("이메일 또는 비밀번호가 일치하지 않습니다.");
+            throw new RuntimeException("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
 
         return jwtUtil.createToken(user.get());
